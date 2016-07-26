@@ -1,0 +1,86 @@
+chrome_button_region = Region(183,705,455,63)
+maximise_button_region = Region(944,8,119,30)
+buy_in_region = Region(361,468,413,204)
+
+
+x_button_region = Region(758,169,136,52)
+t_c_region = Region(485,593,92,58)
+
+#lets_go = "1441810891773.png"
+
+
+
+
+
+if maximise_button_region.exists("1433805662474.png"):
+    maximise_button_region.click("1433805662474.png")
+else:
+    chrome_button_region.click("1433855651344.png")
+    maximise_button_region.click("1433805662474.png")
+
+
+
+try:
+    x_button_region.wait("1433856115391.png",5)
+    click("1433854630169.png")
+except:
+    print 'No new messages'
+
+wait(2)
+
+try:
+    click(Pattern("1433854836266.png").similar(0.78))
+except:
+    print 'Nothing to send to friends'
+    
+wait(2)
+
+try:
+    click(Pattern("1435603459509.png").similar(0.82))
+except:
+    print 'No friends to invite'
+
+try:
+    click("1433531030485.png")
+    click("1433531039673.png")
+except:
+    print 'already in game'
+
+
+try:
+    wait("1435270575543.png",10)
+    t_c_region.click("1435270575543.png")
+except:
+    print 'Terms and conditions not there'
+    
+
+
+if exists("1433855173074.png"):
+    click("1433855173074.png")
+    buy_in_region.wait("1433855305063.png",1000)
+    buy_in_region.click("1433855305063.png")
+    
+else:
+    
+    click("1433856474655.png")
+    wait("1433856927579.png",1000)
+    click("1433856927579.png")
+    wait("1433855039032.png",1000)
+    click("1433855039032.png")
+    wait(Pattern("1433855305063.png").exact(),1000)
+    buy_in_region.click(Pattern("1433855305063.png").exact())
+        
+    
+  
+
+
+
+
+
+check = find("1433855081648.png")
+fold = find("1433855100347.png")
+bet = find("1433855117118.png")
+check_fold = find("1433855136467.png")
+
+
+
