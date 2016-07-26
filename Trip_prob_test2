@@ -1,0 +1,74 @@
+import numpy as np
+import math as m
+
+deck = np.ones((4,13))
+com_card = []
+hole_card1 = 0 + 0j
+hole_card2 = 11 + 3j
+rand1 = int(13*np.random.rand())
+rand2 = int(4*np.random.rand())
+com_card.append(complex(rand1,rand2))
+
+
+
+
+
+
+
+def trip_prob(card1, card2, num_players):
+    prob = 0.0
+    interm = 0
+    intial_cards = 52 - 2*num_players
+    card1_suit = int(card1.imag)
+    card1_base = int(card1.real)
+    deck[card1_suit][card1_base] = 0
+
+    card2_suit = int(card2.imag)
+    card2_base = int(card2.real)
+    deck[card2_suit][card2_base] = 0
+
+    for i in range(len(com_card)):
+        com_card_suit = int(com_card[i].imag)
+        com_card_base = int(com_card[i].real)
+
+        deck[com_card_suit][com_card_base] = 0
+        
+
+    for i in range(13):
+        for j in range(4):
+            interm = interm + deck[j][i]
+            
+        prob =  prob + m.factorial(interm - 1) 
+        interm = 0
+        
+   # prob = prob*(m.factorial(
+    
+
+
+
+        
+
+
+
+def trip_calc():
+    prob1 = np.zeros(48)
+    prob2 = np.zeros(48)
+    prob3 = np.zeros(48)
+    prob = 0.0
+    test = 0
+
+    for i in np.arange(5.0, 53.0):
+        prob1[i-5] = 4.0/i
+        prob2[i-5] = 3.0/(i-1.0)
+        prob3[i-5] = 2.0/(i-2.0)
+
+    for i in range(48):
+        for j in range(i,48):
+            for k in range(j,48):
+                prob = prob + prob1[i]*prob2[j]*prob3[k]
+            print prob
+       
+    return prob
+
+print trip_calc()
+
