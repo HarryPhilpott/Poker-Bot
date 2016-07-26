@@ -1,0 +1,200 @@
+import numpy as np
+import subprocess , sys
+import itertools
+import time
+
+def read(fname):
+    try:
+        with open(fname, 'r') as f:
+            string = f.readline()
+        with open(fname, 'w') as f:
+            f.write('')
+    except:
+        print 'error opening file ', fname
+    return str(string)
+
+        
+def write(string):
+    fname = 'C:/Users/Harry/Documents/Algo/poker/totaloutput.txt'
+    print string
+    string1 = str(string)
+    with open(fname, 'w') as f:
+        f.write(string1)
+        
+
+def str_list(string):
+    char_list = list(string)
+    int_list = []
+    
+    for i in char_list:
+        try:
+            int_list.append(int(i))
+        except:
+            pass
+
+    return int_list
+
+
+def sum_list(*args):
+    ret_list = []
+    summ = 0
+    for i in range(len(args[0][:])):
+        for j in range(len(args[:][:])):
+            summ += args[j][i]
+        ret_list.append(summ)
+        summ = 0
+
+    return ret_list
+
+def check(string, i):
+    global hole_card_list, comm_card_list, comm_sum1, comm_sum2, time1
+    global suit_hole_list, suit_comm_list, suit_comm_sum2, suit_comm_sum1
+
+    if 'end' in string:
+        if time.time() - time1 > 20:
+            time1 = time.time()
+            print 'end ', string
+            hole_card_list = [0]*14
+            hole_card_list[13] = 1
+            
+            comm_card_list = [0]*14
+            comm_card_list[13] = 2
+            
+            suit_comm_list = [0]*5
+            suit_comm_list[4] = 3
+
+            suit_hole_list = [0]*5
+            suit_hole_list[4] = 4
+            
+            comm_sum2 = 0
+            suit_comm_sum2 = 0
+            return
+        return
+    
+
+    b_list = str_list(string)
+
+    
+    try:
+        if i < 4:
+            if b_list[13] == 1:
+                hole_card_list[:13] = sum_list(hole_card_list[:13], b_list[:13])
+            else:
+                comm_card_list[:13] = sum_list(comm_card_list[:13], b_list[:13])
+    except:
+        print 'error in rank input string   ', string
+
+    try:
+        if i == 4:
+            if b_list[4] == 6:
+                suit_hole_list[:4] = sum_list(suit_hole_list[:4], b_list[:4])
+            else:
+                suit_comm_list[:4] = sum_list(suit_comm_list[:4], b_list[:4])
+                
+    except:
+        print 'error in suit input string   ', string
+        
+
+
+    hole_sum = sum(hole_card_list[:13])
+    comm_sum1 = sum(comm_card_list[:13])
+    suit_hole_sum = sum(suit_hole_list[:4])
+    suit_comm_sum1 = sum(suit_comm_list[:4])
+
+
+    if hole_sum == 2:
+        hole_card_list[13] = 1
+        write(hole_card_list)
+        hole_card_list = [0]*14
+        hole_card_list[13] = 1
+
+    if suit_hole_sum == 2:
+        suit_hole_list[4] = 4
+        write(suit_hole_list)
+        suit_hole_list = [0]*5
+        suit_hole_list[4] = 4
+          
+
+    if comm_sum1 > comm_sum2:
+        comm_sum2 = comm_sum1
+        write(comm_card_list)
+
+    if suit_comm_sum1 > suit_comm_sum2:
+        suit_comm_sum2 = suit_comm_sum1
+        write(suit_comm_list)
+
+
+
+    
+
+files = np.array([0,1,2,3,4,5], dtype=object)
+sikuli = 'C:/Sikuli/runIDE.cmd -r '
+files[0] = 'C:/Users/Harry/Documents/Algo/start.sikuli'
+files[1] = 'C:/Users/Harry/Documents/Algo/find_rank5.sikuli < C:\Users\Harry\Documents\Algo\poker\input1.txt'
+files[2] = 'C:/Users/Harry/Documents/Algo/find_rank5.sikuli < C:\Users\Harry\Documents\Algo\poker\input2.txt'
+files[3] = 'C:/Users/Harry/Documents/Algo/find_rank5.sikuli < C:\Users\Harry\Documents\Algo\poker\input3.txt'
+files[4] = 'C:/Users/Harry/Documents/Algo/find_rank5.sikuli < C:\Users\Harry\Documents\Algo\poker\input4.txt'
+files[5] = 'C:/Users/Harry/Documents/Algo/find_suit3.sikuli'
+
+output_files = np.array([0,1,2,3,4,5,6], dtype=object)
+output_files[0] = 'C:/Users/Harry/Documents/Algo/find_rank5.sikuli/output03.txt'
+output_files[1] = 'C:/Users/Harry/Documents/Algo/find_rank5.sikuli/output37.txt'
+output_files[2] = 'C:/Users/Harry/Documents/Algo/find_rank5.sikuli/output710.txt'
+output_files[3] = 'C:/Users/Harry/Documents/Algo/find_rank5.sikuli/output1013.txt'
+output_files[4] = 'C:/Users/Harry/Documents/Algo/find_suit3.sikuli/output.txt'
+
+
+process = subprocess.Popen(sikuli + files[1])
+
+
+process2 = subprocess.Popen(sikuli + files[2])
+
+
+process3 = subprocess.Popen(sikuli + files[3])
+
+
+process4 = subprocess.Popen(sikuli + files[4])
+
+
+##process5 = subprocess.Popen(sikuli + files[5])
+
+
+
+hole_card_list = [0]*14
+hole_card_list[13] = 1
+
+comm_card_list = [0]*14
+comm_card_list[13] = 2
+
+time1 = 0.0
+comm_sum1 = 0
+comm_sum2 = 0
+suit_comm_sum1 = 0
+suit_comm_sum2 = 0
+
+suit_comm_list = [0]*5
+suit_comm_list[4] = 3
+
+suit_hole_list = [0]*5
+suit_hole_list[4] = 4
+
+
+
+
+while True:
+
+    for i in range(4):
+        b = read(output_files[i])
+
+        if '[' in b or 'end' in b:
+            check(b, i)
+        
+   
+            
+
+        
+    
+#C:\Users\Harry\Documents\Algo\poker\basic_interact_test8.py
+
+
+
