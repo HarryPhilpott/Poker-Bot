@@ -1,0 +1,80 @@
+def hand(hole_card_list, comm_card_list, suit_comm_list, suit_hole_list):
+    result = 0
+    pair_sum = 0
+    pair_list = sum_list(hole_card_list, comm_card_list)
+    pair = []       #This is to determine the rank of the pairs
+
+
+    flush_list = sum_list(suit_comm_list, suit_hole_list)
+    flush = False
+
+    straight = False
+    
+    for i in range(13):
+        if pair_list[i] == 2:
+            pair_sum += pair_list[i]
+            pair.append(i)
+
+    for i in range(4):
+        if flush_list[i] == 5:
+            flush = True                #flush
+            result = 5
+
+    for i in range(9):
+        if sum(pair_list[i:i+5]) == 5:
+            kicker = (i+5)*0.01         #straight
+            straight = True
+            result = 4 + kicker
+
+            
+
+    if pair_sum == 2:       #pair
+        kicker = pair_kicker(pair_list, pair[0])
+        result = 1 + kicker*0.01
+        return result
+
+    
+
+    if pair_sum == 4 and len(pair) == 2:        #two pair
+        if pair[1] > pair [0]:
+            kicker = (pair[1] + 1)*0.01 + (pair[0] + 1)*0.0001
+        else:
+            kicker = (pair[0] + 1)*0.01 + (pair[1] + 1)*0.0001
+            
+        kicker1 = two_pair_kicker(pair_list, pair[0], pair[1])
+        
+        result = 2 + kicker + kicker1*0.0000001
+        return result
+
+    
+
+    if pair_sum == 3 and len(pair) == 1:        #three of a kind
+        kicker = pair_kicker(pair_list, pair[0])
+        result = 3 + kicker*0.01
+        return result
+
+
+    
+
+    if pair_sum == 5 and len(pair) == 2:        #full house
+        if pair[1] > pair [0]:
+            kicker = (pair[1] + 1)*0.01 + (pair[0] + 1)*0.0001
+        else:
+            kicker = (pair[0] + 1)*0.01 + (pair[1] + 1)*0.0001
+            
+        result = 6 + kicker
+        return result
+
+
+    
+
+    if pair_sum == 4 and len(pair) == 1:        #quad
+        kicker = pair_kicker(pair_list, pair[0])
+        result = 7 + kicker*0.01
+        return result
+
+    if straight == True and flush == True:      #straight flush
+        result = 8 + kicker
+        return result
+
+    return result
