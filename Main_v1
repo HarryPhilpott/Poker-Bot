@@ -63,11 +63,11 @@ files[5] = 'C:/Users/Harry/Documents/Algo/find_suit.sikuli'
 ##
 ##email_box = browser.find_element_by_name('email')
 ##
-##email_box.send_keys('hp672@york.ac.uk')
+##email_box.send_keys('///////////')
 ##
 ##password_box = browser.find_element_by_name('pass')
 ##
-##password_box.send_keys('123qweasdzxc123' + Keys.RETURN)
+##password_box.send_keys('///////////' + Keys.RETURN)
 
 
 
