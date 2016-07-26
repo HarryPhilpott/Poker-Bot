@@ -1,0 +1,251 @@
+from selenium import webdriver
+import numpy as np
+from selenium.webdriver.common.keys import Keys
+import os
+import subprocess , sys
+import itertools
+
+
+def str_list(string):
+    char_list = list(string)
+    int_list = []
+    
+    for i in char_list:
+        try:
+            int_list.append(float(i))
+        except:
+            pass
+
+    return int_list
+
+def sum_list(*args):
+    ret_list = []
+    summ = 0.0
+    for i in range(len(args[0][:])):
+        for j in range(len(args[:][:])):
+            summ += args[j][i]
+        ret_list.append(summ)
+        summ = 0.0
+
+    return ret_list
+
+
+    
+
+files = np.array([0,1,2,3,4,5], dtype=object)
+sikuli = 'C:/Sikuli/runIDE.cmd -r '
+files[0] = 'C:/Users/Harry/Documents/Algo/start.sikuli'
+files[1] = 'C:/Users/Harry/Documents/Algo/find_rank1.sikuli < C:\Users\Harry\Documents\Algo\poker\input1.txt'
+files[2] = 'C:/Users/Harry/Documents/Algo/find_rank1.sikuli < C:\Users\Harry\Documents\Algo\poker\input2.txt'
+files[3] = 'C:/Users/Harry/Documents/Algo/find_rank1.sikuli < C:\Users\Harry\Documents\Algo\poker\input3.txt'
+files[4] = 'C:/Users/Harry/Documents/Algo/find_rank1.sikuli < C:\Users\Harry\Documents\Algo\poker\input4.txt'
+files[5] = 'C:/Users/Harry/Documents/Algo/find_suit2.sikuli'
+
+
+    
+##browser = webdriver.Chrome()
+##
+##browser.get('https://apps.facebook.com/texas_holdem/?fb_source=bookmark&ref=bookmarks&count=0&fb_bmpos=_0')
+##
+##browser.implicitly_wait(10)
+##
+##email_box = browser.find_element_by_name('email')
+##
+##email_box.send_keys('///////')
+##
+##password_box = browser.find_element_by_name('pass')
+##
+##password_box.send_keys('///////' + Keys.RETURN)
+
+
+
+#os.system(command + files[1])
+
+
+
+
+process = subprocess.Popen(sikuli + files[1], stdout=subprocess.PIPE)
+lines_iterator = iter(process.stdout.readline, b'')
+
+
+process2 = subprocess.Popen(sikuli + files[2], stdout=subprocess.PIPE)
+lines_iterator2 = iter(process2.stdout.readline, b'')
+
+
+process3 = subprocess.Popen(sikuli + files[3], stdout=subprocess.PIPE)
+lines_iterator3 = iter(process3.stdout.readline, b'')
+
+process4 = subprocess.Popen(sikuli + files[4], stdout=subprocess.PIPE)
+lines_iterator4 = iter(process4.stdout.readline, b'')
+
+process5 = subprocess.Popen(sikuli + files[5], stdout=subprocess.PIPE)
+lines_iterator5 = iter(process5.stdout.readline, b'')
+
+a = 0
+comm_sum1 = 0
+comm_sum2 = 0
+suit_comm_sum1 = 0
+suit_comm_sum2 = 0
+found_hole = False
+found_hole_suit = False
+no_repeat = 5
+b_switch = False
+c_switch = False
+d_switch = False
+e_switch = False
+f_switch = False
+suit_comm_list = [0]*5
+suit_hole_list = [0]*5
+comm_card_list2 = [0]*14
+comm_card_list1 = [0]*14
+hole_card_list = [0]*14
+b_hole_list = [0]*14
+b_comm_list = [0]*14
+c_hole_list = [0]*14
+c_comm_list = [0]*14
+d_hole_list = [0]*14
+d_comm_list = [0]*14
+e_hole_list = [0]*14
+e_comm_list = [0]*14
+
+
+while a < 1:
+    
+    c = lines_iterator.next()
+    b = lines_iterator2.next()
+    d = lines_iterator3.next()
+    e = lines_iterator4.next()
+    f = lines_iterator5.next()
+
+            
+    if '['  in str(f)and f_switch == False:
+        f_list = str_list(str(f))
+        if f_list[4] == 7:
+            suit_hole_list = f_list
+
+        if f_list[4] > 7:
+            suit_comm_list = f_list
+
+
+    if '['  in str(b)and b_switch == False:     
+        b_list = str_list(str(b))
+        if b_list[13] == 6:
+            b_hole_list = b_list
+
+        if b_list[13] == 5:
+            b_comm_list = b_list
+
+
+    if '['  in str(c) and c_switch == False:
+        c_list = str_list(str(c))
+        if c_list[13] == 6:
+            c_hole_list = c_list
+
+        if c_list[13] == 5:
+            c_comm_list = c_list
+         
+
+
+    if '['  in str(d) and d_switch == False:
+        d_list = str_list(str(d))
+        if d_list[13] == 6:
+            d_hole_list = d_list
+
+        if d_list[13] == 5:
+            d_comm_list = d_list
+
+
+
+    if '['  in str(e)and e_switch == False:
+        e_list = str_list(str(e))
+        if e_list[13] == 6:
+            e_hole_list = e_list
+
+        if e_list[13] == 5:
+            e_comm_list = e_list
+            
+
+
+    if ('end' in str(b) or 'end' in str(c) or 'end' in str(d) or 'end' in str(e) or 'end' in str(f)) and no_repeat == 5:
+        print 'end of round'
+        no_repeat = 0
+        found_hole = False
+        found_hole_suit = False
+        suit_hole_list = [0]*5
+        suit_comm_list = [0]*5
+        b_hole_list = [0]*14
+        b_comm_list = [0]*14
+        c_hole_list = [0]*14
+        c_comm_list = [0]*14
+        d_hole_list = [0]*14
+        d_comm_list = [0]*14
+        e_hole_list = [0]*14
+        e_comm_list = [0]*14
+        hole_sum = 0
+        comm_sum1 = 0
+        comm_sum2 = 0
+        suit_comm_sum1 = 0
+        suit_comm_sum2 = 0
+        b_switch = True
+        c_switch = True
+        d_switch = True
+        e_switch = True
+        f_switch = True
+
+    if 'end' in str(f):
+        no_repeat += 1
+        f_switch = False
+
+    if 'end' in str(b):
+        no_repeat += 1
+        b_switch = False
+
+    if 'end' in str(c):
+        no_repeat += 1
+        c_switch = False
+
+    if 'end' in str(d):
+        no_repeat += 1
+        d_switch = False
+
+    if 'end' in str(e):
+        no_repeat += 1
+        e_switch = False
+        
+    hole_sum = sum(b_hole_list[:13] + c_hole_list[:13] + d_hole_list[:13] + e_hole_list[:13])
+    comm_sum1 = sum(c_comm_list[:13] + b_comm_list[:13] + d_comm_list[:13] + e_comm_list[:13])
+    suit_comm_sum1 = sum(suit_comm_list[:4])    
+    
+
+    if sum(suit_hole_list[:4]) == 2 and found_hole_suit == False:
+        found_hole_suit = True
+        print 'hole suit = ', suit_hole_list
+        suit_hole_list = [0]*5
+
+    if suit_comm_sum1 > suit_comm_sum2:
+        suit_comm_sum2 = suit_comm_sum1
+        print 'comm suit = ', suit_comm_list
+
+    
+    if hole_sum == 2 and found_hole == False:
+        hole_card_list = sum_list(b_hole_list, c_hole_list, d_hole_list, e_hole_list)
+        print 'hole = ', hole_card_list
+        b_hole_list = [0]*14
+        c_hole_list = [0]*14
+        d_hole_list = [0]*14
+        e_hole_list = [0]*14
+        found_hole = True        
+    
+          
+
+    if comm_sum1 > comm_sum2:
+        comm_sum2 = comm_sum1
+        comm_card_list = sum_list(c_comm_list, b_comm_list, d_comm_list, e_comm_list)
+        print 'comm = ', comm_card_list
+
+        
+    
+#C:\Users\Harry\Documents\Algo\poker\basic_interact_test3.py
+
+
+
