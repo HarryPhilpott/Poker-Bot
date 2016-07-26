@@ -1,0 +1,93 @@
+import numpy as np
+
+
+#0 = check/fold, 1 = raise, 2 = bet. a 3 means only if suited
+
+
+early_file = open('early.txt', 'w')
+middle_file = open('middle.txt', 'w')
+late_file = open('late.txt', 'w')
+
+
+early = np.zeros((13,13))
+
+middle = np.zeros((13,13))
+
+late = np.zeros((13,13))
+
+
+early[12,10:13] = 1
+early[11,11] = 1
+early[10,10] = 1
+early[9,9] = 2
+early[8,8] = 2
+
+
+
+
+middle[12,10:13] = 1
+middle[12,9] = 2
+middle[12,8] = 3
+
+middle[11,11] = 1
+middle[11,10] = 2
+middle[11,9] = 3
+
+middle[10,10] = 1
+middle[10,9] = 3
+
+middle[9,9] = 1
+middle[9,8] = 3
+
+middle[8,8] = 2
+middle[8,7] = 3
+
+middle[7,7] = 2
+middle[6,6] = 2
+middle[5,5] = 2
+
+
+
+
+late[12,10:13] = 1
+late[12,8:10] = 2
+late[12,:8] = 3
+
+late[11,10:12] = 1
+late[11,7:10] = 2
+
+late[10,10] = 1
+late[10,7:10] = 2
+
+late[9,9] = 1
+late[9,8] = 2
+
+late[8,8] = 1
+late[8,7] = 3
+
+for i in range(8):
+    late[i,i] = 2
+
+
+
+
+for i in range(13):
+    for j in range(13):
+        early[i,j] = early[j,i]
+        middle[i,j] = middle[j,i]
+        late[i,j] = late[j,i]
+
+    
+        
+    early_file.write( str(early[i][:]).replace('[','').replace(']', '') + '\n' )
+    middle_file.write(str(middle[i][:]).replace('[','').replace(']', '') + '\n')
+    late_file.write(str(late[i][:]).replace('[','').replace(']', '') + '\n')
+        
+    
+
+        
+early_file.close()
+middle_file.close()
+late_file.close()
+
+
