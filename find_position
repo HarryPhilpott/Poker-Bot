@@ -1,0 +1,89 @@
+
+def write(string):
+    fname = 'C:/Users/Harry/Documents/Algo/find_position2.sikuli/output.txt'
+    string1 = str(string)
+    with open(fname, 'w') as f:
+        f.write(string1)
+
+
+def num_people():
+    check_region.findAll("1440685125245.png")
+    match = list(check_region.getLastMatches())
+    num_matches = len(match)
+
+    return num_matches
+
+
+def find_dealer():
+    for i in range(8):
+        if position[i].exists(dealer):
+            return i + 1
+    return 9
+
+
+
+def find_people(dealer_pos):
+    summ = 0
+    for i in range(dealer_pos, 9):
+        if seat[i].exists("1440685125245.png"):
+            summ += 1
+
+
+    return summ
+
+
+
+
+
+check_region = Region(204,137,660,380)
+    
+
+position = []
+position.append(Region(559,367,29,32))#1
+position.append(Region(365,348,24,27))#2
+position.append(Region(326,373,24,30))#3
+position.append(Region(351,278,24,30))#4
+position.append(Region(381,255,23,25))#5
+position.append(Region(654,251,27,31))#6
+position.append(Region(690,273,27,29))#7
+position.append(Region(706,378,24,24))#8
+position.append(Region(704,378,25,25))#9
+        
+dealer = "1438543757066.png"
+
+
+
+seat = []
+
+seat.append(Region(488,365,33,38))#1 done
+seat.append(Region(414,354,31,35))#2 done
+seat.append(Region(305,340,28,33))#3done
+seat.append(Region(331,251,30,36))#4 done
+seat.append(Region(449,235,30,32))#5done
+seat.append(Region(572,237,27,31))#6done
+seat.append(Region(697,249,26,37))#7 done
+seat.append(Region(717,321,30,32))#8 done
+seat.append(Region(606,349,27,33))#9done
+
+end_region = Region(143,628,221,40)
+
+
+while True:
+    dealer_pos = find_dealer()
+    people = num_people()
+    place = find_people(dealer_pos)
+    write(str(place/float(people)))
+    end_region.wait("1440687761525.png",100000000)
+    write('end')
+    wait(1)
+
+
+
+#C:\Sikuli\runIDE.cmd -r C:\Users\Harry\Documents\Algo\find_position3.sikuli
+
+
+
+
+
+
+
