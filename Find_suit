@@ -1,0 +1,199 @@
+import sys, subprocess
+
+
+def write(string):
+    fname = 'C:/Users/Harry/Documents/Algo/find_suit3.sikuli/output.txt'
+    with open(fname, 'w') as f:
+        f.write(str(string))
+
+
+def wait_hole():
+    wait_region = Region(496,417,43,86)
+
+    while True:
+        if wait_region.exists(Pattern("1438195060501.png").similar(0.90)):
+            return 'end from pre-flop'
+        if check_region.exists("1437935359726.png"):
+            pass
+        else: 
+            return 'null hole'
+
+
+def wait_flop():
+    while True:
+        if check_region.exists(Pattern("1437931422173.png").similar(0.83)):
+            
+            if check_region.exists("1437935359726.png"):
+                return 'end from flop'
+            
+        else:
+            return 'null flop'
+
+
+
+def wait_turn():
+    while True:
+        if check_region.exists(Pattern("1437342126033.png").similar(0.76)):
+            
+            if check_region.exists("1437935359726.png"):
+                return 'end from turn'
+            
+        else:
+            return  'null turn'
+
+def wait_river():
+    while True:
+        if check_region.exists("1437935359726.png"):
+            write('natural end')
+            return
+
+        
+
+def find_hole_suit():
+    suit_check_region = Region(468,458,47,19)
+    hole_num_suit = [0]*5
+    hole_num_suit[4] = 6
+    for i in range(3):
+        try:
+            suit_check_region.findAll(hole_suit[i])
+            match = list(suit_check_region.getLastMatches())
+            hole_num_suit[i] = len(match)
+        except:
+            pass
+
+        if sum(hole_num_suit[:4]) == 2:
+            write(hole_num_suit)
+            return
+
+            
+
+    remainder = 2 - sum(hole_num_suit[:4])
+    hole_num_suit[3] = remainder
+    write(hole_num_suit)
+
+
+
+
+def find_flop_suit():
+    global check_region, flop_region
+
+    num_comm_suit = [0]*5
+    num_comm_suit[4] = 7
+    for i in range(3):
+        try:
+            flop_region.findAll(suit[i])
+            match = list(flop_region.getLastMatches())
+            num_comm_suit[i] = len(match)
+        except:
+            pass
+
+        if sum(num_comm_suit[:4]) == 3:
+            write(num_comm_suit)
+            return
+
+
+    remainder = 3 - sum(num_comm_suit[:4])
+    num_comm_suit[3] = remainder
+    write(num_comm_suit)
+
+
+
+
+def find_turn_suit():
+    num_comm_suit = [0]*5
+    num_comm_suit[4] = 8
+    for i in range(3):
+        try:
+            turn_region.find(suit[i])
+            num_comm_suit[i] = 1
+            write(num_comm_suit)
+            return
+        except:
+            pass
+
+
+    num_comm_suit[3] = 1
+    write(num_comm_suit)
+
+
+
+def find_river_suit():
+    num_comm_suit = [0]*5
+    num_comm_suit[4] = 9
+    for i in range(3):
+        try:
+            river_region.find(suit[i])
+            num_comm_suit[i] = 1
+            write(num_comm_suit)
+            return
+        except:
+            pass
+
+    num_comm_suit[3] = 1
+    write(num_comm_suit)
+
+
+
+
+def find_suit():
+    global check_region
+    while True:
+        while True:
+            find_hole_suit()
+
+            string1 = wait_hole()
+
+            if 'end' in string1:
+                write(string1)
+                break
+            
+            
+            find_flop_suit()
+
+            string2 = wait_flop()
+            
+            if 'end' in string2:
+                write(string2)
+                break
+
+            
+             
+            find_turn_suit()
+
+            string3 = wait_turn()
+            
+            if 'end' in string3:
+                write(string3)
+                break
+
+            
+             
+            find_river_suit()
+            
+            wait_river()
+            
+
+                    
+        
+
+
+check_region = Region(418,296,216,57)
+
+flop_region =  Region(428,302,115,24) #flop region
+turn_region = Region(545,303,25,22) #turn region
+river_region = Region(585,304,25,20) #river region
+
+suit = []
+suit.append(Pattern("1438526760404.png").similar(0.90))
+suit.append("1438526841963.png")
+suit.append(Pattern("1438526737610.png").similar(0.89))
+
+
+
+hole_suit = []
+hole_suit.append(Pattern("1438526937303.png").similar(0.90))
+hole_suit.append(Pattern("1438527021307.png").similar(0.90))
+hole_suit.append(Pattern("1438526927803.png").similar(0.90))
+
+
+find_suit()
