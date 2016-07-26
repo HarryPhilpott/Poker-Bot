@@ -1,0 +1,160 @@
+import numpy as np
+import subprocess , sys
+import itertools
+import time
+
+def read(fname):
+    try:
+        with open(fname, 'r') as f:
+            string = f.readline()
+        with open(fname, 'w') as f:
+            f.write('')
+    except:
+        print 'error opening file ', fname
+    return str(string)
+        
+
+
+def str_list(string):
+    char_list = list(string)
+    int_list = []
+    
+    for i in char_list:
+        try:
+            int_list.append(int(i))
+        except:
+            pass
+
+    return int_list
+
+
+def sum_list(*args):
+    ret_list = []
+    summ = 0
+    for i in range(len(args[0][:])):
+        for j in range(len(args[:][:])):
+            summ += args[j][i]
+        ret_list.append(summ)
+        summ = 0
+
+    return ret_list
+
+def check(string, i):
+    global hole_card_list, flop_card_list, comm_sum1, comm_sum2, time1, turn_card_list, river_card_list, time2
+
+    if 'end' in string:
+        if time.time() - time1 > 20:
+            time1 = time.time()
+            print 'end ', string
+            hole_card_list = np.zeros((4, 13))
+            flop_card_list = np.zeros((4, 13))
+            turn_card_list = np.zeros((4, 13))
+            river_card_list = np.zeros((4, 13))
+            comm_sum2 = 0
+            return
+        return
+    
+
+    b_list = str_list(string)
+    
+    try:
+        if b_list[13] == 1:
+            hole_card_list[i][:13] = sum_list(hole_card_list[i][:13], b_list[:13])
+            
+        if b_list[13] == 2:
+            flop_card_list[i][:13] = sum_list(flop_card_list[i][:13], b_list[:13])
+            
+        if b_list[13] == 3:
+            turn_card_list[i][:13] = sum_list(turn_card_list[i][:13], b_list[:13])
+
+        if b_list[13] == 4:
+            river_card_list[i][:13] = sum_list(river_card_list[i][:13], b_list[:13])
+    except:
+        print 'error in input string   ', string
+        
+
+    tot_flop_list = sum_list(flop_card_list[0][:13], flop_card_list[1][:13], flop_card_list[2][:13], flop_card_list[3][:13])
+    tot_turn_list = sum_list(turn_card_list[0][:13], turn_card_list[1][:13], turn_card_list[2][:13], turn_card_list[3][:13])
+    tot_river_list = sum_list(river_card_list[0][:13], river_card_list[1][:13], river_card_list[2][:13], river_card_list[3][:13])
+    
+
+    hole_sum = sum(hole_card_list[0][:13] + hole_card_list[1][:13] + hole_card_list[2][:13] + hole_card_list[3][:13])
+    comm_sum1 = sum(tot_flop_list + tot_turn_list + tot_river_list)
+
+
+    if hole_sum == 2 and time.time() - time2 > 10:
+        time2 = time.time()
+        print 'hole = ', sum_list(hole_card_list[0][:13], hole_card_list[1][:13], hole_card_list[2][:13], hole_card_list[3][:13])
+        hole_card_list = np.zeros((6, 13))
+          
+
+    if comm_sum1 > comm_sum2:
+        comm_sum2 = comm_sum1
+        print 'comm = ', sum_list(tot_flop_list, tot_turn_list, tot_river_list)
+
+
+
+    
+
+files = np.array([0,1,2,3,4,5], dtype=object)
+sikuli = 'C:/Sikuli/runIDE.cmd -r '
+files[0] = 'C:/Users/Harry/Documents/Algo/start.sikuli'
+files[1] = 'C:/Users/Harry/Documents/Algo/find_rank5.sikuli < C:\Users\Harry\Documents\Algo\poker\input1.txt'
+files[2] = 'C:/Users/Harry/Documents/Algo/find_rank5.sikuli < C:\Users\Harry\Documents\Algo\poker\input2.txt'
+files[3] = 'C:/Users/Harry/Documents/Algo/find_rank5.sikuli < C:\Users\Harry\Documents\Algo\poker\input3.txt'
+files[4] = 'C:/Users/Harry/Documents/Algo/find_rank5.sikuli < C:\Users\Harry\Documents\Algo\poker\input4.txt'
+files[5] = 'C:/Users/Harry/Documents/Algo/find_suit3.sikuli'
+
+output_files = np.array([0,1,2,3,4,5,6], dtype=object)
+output_files[0] = 'C:/Users/Harry/Documents/Algo/find_rank5.sikuli/output03.txt'
+output_files[1] = 'C:/Users/Harry/Documents/Algo/find_rank5.sikuli/output37.txt'
+output_files[2] = 'C:/Users/Harry/Documents/Algo/find_rank5.sikuli/output710.txt'
+output_files[3] = 'C:/Users/Harry/Documents/Algo/find_rank5.sikuli/output1013.txt'
+
+
+process = subprocess.Popen(sikuli + files[1])
+
+
+process2 = subprocess.Popen(sikuli + files[2])
+
+
+process3 = subprocess.Popen(sikuli + files[3])
+
+
+process4 = subprocess.Popen(sikuli + files[4])
+
+
+
+flop_card_list = np.zeros((4, 13))
+turn_card_list = np.zeros((4, 13))
+river_card_list = np.zeros((4, 13))
+hole_card_list = np.zeros((4, 13))
+time1 = 0.0
+time2 = 0.0
+comm_sum1 = 0
+comm_sum2 = 0
+suit_comm_sum1 = 0
+suit_comm_sum2 = 0
+suit_comm_list = [0]*5
+suit_hole_list = [0]*5
+
+
+
+
+while True:
+
+    for i in range(4):
+        b = read(output_files[i])
+
+        if '[' in b or 'end' in b:
+            check(b, i)
+        
+   
+            
+
+        
+    
+#C:\Users\Harry\Documents\Algo\poker\basic_interact_test7.py
+
+
+
